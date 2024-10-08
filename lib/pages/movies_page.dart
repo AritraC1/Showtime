@@ -10,12 +10,30 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     // Fetch movies when the widget is initialized
     Future.microtask(() => Provider.of<MoviesProvider>(context, listen: false)
         .getTrendingMovies());
+
+    // Add listener to scroll controller to detect when we reach the bottom
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        // Load more movies when scrolled to the bottom
+        Provider.of<MoviesProvider>(context, listen: false)
+            .getTrendingMovies(loadMore: true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -25,38 +43,47 @@ class _MoviesPageState extends State<MoviesPage> {
         children: [
           Expanded(
             child: Consumer<MoviesProvider>(
-                builder: (context, moviesProvider, child) {
-              if (moviesProvider.trendingMovies.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return GridView.builder(
-                itemCount: moviesProvider.trendingMovies.length,
-                itemBuilder: (context, index) {
-                  final movie = moviesProvider.trendingMovies[index];
+              builder: (context, moviesProvider, child) {
+                if (moviesProvider.trendingMovies.isEmpty &&
+                    moviesProvider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return GridView.builder(
+                  controller: _scrollController,
+                  itemCount: moviesProvider.trendingMovies.length,
+                  itemBuilder: (context, index) {
+                    if (index == moviesProvider.trendingMovies.length) {
+                      return const Center(
+                        child: CircularProgressIndicator(), // Loading indicator
+                      );
+                    }
 
-                  return Container(
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                            fit: BoxFit.cover,
+                    final movie = moviesProvider.trendingMovies[index];
+
+                    return Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 2,
-                  crossAxisCount: 3,
-                  childAspectRatio: 2 / 3,
-                  mainAxisSpacing: 2,
-                ),
-              );
-            }),
-          )
+                        ],
+                      ),
+                    );
+                  },
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 2,
+                    crossAxisCount: 3,
+                    childAspectRatio: 2 / 3,
+                    mainAxisSpacing: 2,
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

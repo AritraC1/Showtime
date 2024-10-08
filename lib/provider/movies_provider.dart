@@ -12,20 +12,36 @@ class MoviesProvider with ChangeNotifier {
   // List to store trending movies
   List<Movies> _trendingMovies = [];
 
+  // Pagination
+  int _currentPage = 1; // Track the current page number
+  bool _isLoading = false; // Track if a request is already in progress
+
   // Getter to access trending movies
   List<Movies> get trendingMovies => _trendingMovies;
+  bool get isLoading => _isLoading;
 
-  Future<void> getTrendingMovies() async {
-    final response = await http.get(Uri.parse(_trendingUrl));
+  Future<void> getTrendingMovies({bool loadMore = false}) async {
+    if (_isLoading) return; // Avoid making multiple requests at once
+    _isLoading = true;
+    notifyListeners();
+
+    final response = await http.get(Uri.parse('$_trendingUrl&page=$_currentPage'));
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
-      _trendingMovies =
-          decodedData.map((movie) => Movies.fromJson(movie)).toList();
+      final List<Movies> fetchedMovies = decodedData.map((movie) => Movies.fromJson(movie)).toList();
 
-      // Notify listeners to update the UI
+      if (loadMore) {
+        _trendingMovies.addAll(fetchedMovies); // Append the new movies
+      } else {
+        _trendingMovies = fetchedMovies; // Load initial movies
+      }
+
+      _currentPage++; // Increment the page number for the next fetch
+      _isLoading = false;
       notifyListeners();
     } else {
+      _isLoading = false;
       throw Exception('Failed to load trending movies');
     }
   }
