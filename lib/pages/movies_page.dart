@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:showtime/models/movies.dart';
-import '../api/api.dart';
+import 'package:provider/provider.dart';
+import '../provider/movies_provider.dart';
 
 class MoviesPage extends StatefulWidget {
   const MoviesPage({super.key});
@@ -11,27 +11,51 @@ class MoviesPage extends StatefulWidget {
 
 class _MoviesPageState extends State<MoviesPage> {
   @override
+  void initState() {
+    super.initState();
+    // Fetch movies when the widget is initialized
+    Future.microtask(() => Provider.of<MoviesProvider>(context, listen: false)
+        .getTrendingMovies());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              child: GridView.builder(
+            child: Consumer<MoviesProvider>(
+                builder: (context, moviesProvider, child) {
+              if (moviesProvider.trendingMovies.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return GridView.builder(
+                itemCount: moviesProvider.trendingMovies.length,
                 itemBuilder: (context, index) {
+                  final movie = moviesProvider.trendingMovies[index];
+
                   return Container(
                     color: Colors.white,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Image.network(
+                            'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
-                itemCount: 51,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisSpacing: 2,
                   crossAxisCount: 3,
                   childAspectRatio: 2 / 3,
                   mainAxisSpacing: 2,
                 ),
-              ),
-            ),
+              );
+            }),
           )
         ],
       ),
