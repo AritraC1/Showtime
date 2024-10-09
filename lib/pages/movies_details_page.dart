@@ -43,8 +43,9 @@ class MoviesDetailsPage extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(14.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,7 +61,7 @@ class MoviesDetailsPage extends StatelessWidget {
                       // Fav Button
                       IconButton(
                         onPressed: () {
-                          // TODO : Favorite section
+                          // TODO : Send movie to the Favorite section
                           // TODO : Change color to Red
                         },
                         icon: const Icon(Icons.favorite, color: Colors.white70,),
@@ -133,7 +134,7 @@ class MoviesDetailsPage extends StatelessWidget {
 
                   // Trailers Of the Movie
                   const Text(
-                    "Trailer",
+                    "Trailers and Clips",
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
