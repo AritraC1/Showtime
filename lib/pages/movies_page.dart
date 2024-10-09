@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:showtime/pages/movies_details_page.dart';
 import '../provider/movies_provider.dart';
 
 class MoviesPage extends StatefulWidget {
@@ -60,17 +61,29 @@ class _MoviesPageState extends State<MoviesPage> {
 
                     final movie = moviesProvider.trendingMovies[index];
 
-                    return Container(
-                      color: Colors.white,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Image.network(
-                              'https://image.tmdb.org/t/p/w500${movie.posterPath}',
-                              fit: BoxFit.cover,
-                            ),
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigate to Movies Details Page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MoviesDetailsPage(movie: movie),
                           ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.network(
+                                'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
