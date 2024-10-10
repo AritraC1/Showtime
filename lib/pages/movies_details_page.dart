@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:showtime/models/movies.dart';
 import 'package:showtime/utils/colors.dart';
@@ -64,7 +65,10 @@ class MoviesDetailsPage extends StatelessWidget {
                           // TODO : Send movie to the Favorite section
                           // TODO : Change color to Red
                         },
-                        icon: const Icon(Icons.favorite, color: Colors.white70,),
+                        icon: const Icon(
+                          Icons.favorite,
+                          color: Colors.white70,
+                        ),
                       )
                     ],
                   ),
@@ -142,6 +146,7 @@ class MoviesDetailsPage extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 12),
+
                 ],
               ),
             ),
