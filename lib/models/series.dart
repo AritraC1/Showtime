@@ -1,16 +1,16 @@
 class Series {
-  String title;
+  String name;
   String backdropPath;
-  String originalTitle;
+  String originalName;
   String overview;
   String posterPath;
   String releaseDate;
   double rating;
 
   Series({
-    required this.title,
+    required this.name,
     required this.backdropPath,
-    required this.originalTitle,
+    required this.originalName,
     required this.overview,
     required this.posterPath,
     required this.releaseDate,
@@ -19,12 +19,12 @@ class Series {
 
   factory Series.fromJson(Map<String, dynamic> json) {
     return Series(
-      title: json["title"],
+      name: json["name"],
       backdropPath: json["backdrop_path"],
-      originalTitle: json["original_title"],
+      originalName: json["original_name"],
       overview: json["overview"],
       posterPath: json["poster_path"],
-      releaseDate: json["release_date"],
+      releaseDate: json["first_air_date"],
       rating: json["vote_average"],
     );
   }

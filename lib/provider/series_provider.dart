@@ -5,28 +5,44 @@ import 'package:showtime/models/series.dart';
 import 'package:showtime/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
-class MoviesProvider with ChangeNotifier {
+class SeriesProvider with ChangeNotifier {
   static const _trendingSeriesUrl =
-      'https://api.themoviedb.org/3/trending/movie/day?api_key=${Constants.apiKey}';
+      'https://api.themoviedb.org/3/trending/tv/day?api_key=${Constants.apiKey}';
 
-  // List to store trending movies
+  // List to store trending 
   List<Series> _trendingSeries = [];
 
-  // Getter to access trending movies
-  List<Series> get trendingSeries => _trendingSeries;
+  // Pagination
+  int _currentPage = 1; // Track the current page number
+  bool _isLoading = false; // Track if a request is already in progress
 
-  Future<void> getTrendingMovies() async {
-    final response = await http.get(Uri.parse(_trendingSeriesUrl));
+  // Getter to access trending 
+  List<Series> get trending => _trendingSeries;
+  bool get isLoading => _isLoading;
+
+  Future<void> getTrendingSeries({bool loadMore = false}) async {
+    if (_isLoading) return; // Avoid making multiple requests at once
+    _isLoading = true;
+    notifyListeners();
+
+    final response = await http.get(Uri.parse('$_trendingSeriesUrl&page=$_currentPage'));
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
-      _trendingSeries =
-          decodedData.map((tvSeries) => Series.fromJson(tvSeries)).toList();
+      final List<Series> fetched = decodedData.map((tv) => Series.fromJson(tv)).toList();
 
-      // Notify listeners to update the UI
+      if (loadMore) {
+        _trendingSeries.addAll(fetched); // Append the new
+      } else {
+        _trendingSeries = fetched; // Load initial
+      }
+
+      _currentPage++; // Increment the page number for the next fetch
+      _isLoading = false;
       notifyListeners();
     } else {
-      throw Exception('Failed to load trending movies');
+      _isLoading = false;
+      throw Exception('Failed to load trending ');
     }
   }
 }
