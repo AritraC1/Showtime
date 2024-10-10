@@ -5,6 +5,28 @@ class FavsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+              child: Container(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 2,
+                    crossAxisCount: 3,
+                    childAspectRatio: 2 / 3,
+                    mainAxisSpacing: 2,
+                  ),
+                  itemCount: 51,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      color: Colors.white10,
+                    );
+                  },
+                ),
+              ))
+        ],
+      ),
+    );
   }
 }
