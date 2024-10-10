@@ -31,12 +31,13 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
 
+      // Body and all the pages
       body: IndexedStack(
         index: myIndex,
         children: widgetList,
       ),
 
-
+      // Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: myIndex,
         backgroundColor: Colours.scaffoldBgColor.withOpacity(0.6),
