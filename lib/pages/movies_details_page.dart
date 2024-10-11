@@ -147,6 +147,43 @@ class MoviesDetailsPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
+                  CarouselSlider(
+                    items: [1, 2, 3, 4, 5].map((e) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "$e",
+                            style: const TextStyle(
+                              fontSize: 30,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    options: CarouselOptions(
+                      autoPlay: false,
+                      height: 180,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const Text(
+                    "Top Cast",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
                 ],
               ),
             ),
