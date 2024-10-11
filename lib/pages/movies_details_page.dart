@@ -90,7 +90,6 @@ class MoviesDetailsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        // margin: EdgeInsets.only(left: 10),
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
@@ -150,7 +149,10 @@ class MoviesDetailsPage extends StatelessWidget {
                   CarouselSlider(
                     items: [1, 2, 3, 4, 5].map((e) {
                       return Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         margin: const EdgeInsets.symmetric(horizontal: 7),
                         decoration: BoxDecoration(
                           color: Colors.white,
