@@ -18,7 +18,7 @@ class VideosProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final url =
+    const url =
         ' https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=${Constants.apiKey}';
 
     final response = await http.get(Uri.parse(url));
