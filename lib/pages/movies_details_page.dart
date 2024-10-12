@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:showtime/models/movies.dart';
+import 'package:showtime/provider/videos_provider.dart';
 import 'package:showtime/utils/colors.dart';
 import 'package:showtime/utils/constants.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MoviesDetailsPage extends StatelessWidget {
   final Movies movie;
@@ -110,6 +113,7 @@ class MoviesDetailsPage extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const Spacer(),
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -146,33 +150,64 @@ class MoviesDetailsPage extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  CarouselSlider(
-                    items: [1, 2, 3, 4, 5].map((e) {
-                      return Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        margin: const EdgeInsets.symmetric(horizontal: 7),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "$e",
-                            style: const TextStyle(
-                              fontSize: 30,
-                              color: Colors.blue,
+                  Consumer<VideosProvider>(
+                    builder: (context, videosProvider, child) {
+                      if (videosProvider.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (videosProvider.trailers.isEmpty) {
+                        return const Text('No trailers available');
+                      }
+
+                      return CarouselSlider(
+                        items: videosProvider.trailers.map((trailer) {
+                          // Build the trailer item using the 'key' for a video
+                          final videoKey = trailer.key;
+                          final videoUrl =
+                              'https://www.youtube.com/watch?v=$videoKey';
+
+                          return Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: const EdgeInsets.symmetric(horizontal: 7),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ),
+                            child: Column(
+                              children: [
+                                // Display YouTube trailer using the video key
+                                Expanded(
+                                  child: YoutubePlayer(
+                                    controller: YoutubePlayerController(
+                                      initialVideoId: videoKey,
+                                      flags: const YoutubePlayerFlags(
+                                        autoPlay: false,
+                                        mute: false,
+                                      ),
+                                    ),
+                                    showVideoProgressIndicator: true,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  trailer.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        options: CarouselOptions(
+                          autoPlay: false,
+                          height: 180,
                         ),
                       );
-                    }).toList(),
-                    options: CarouselOptions(
-                      autoPlay: false,
-                      height: 180,
-                    ),
+                    },
                   ),
 
                   const SizedBox(height: 20),
