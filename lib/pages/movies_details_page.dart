@@ -211,16 +211,6 @@ class MoviesDetailsPage extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 20),
-
-                  const Text(
-                    "Top Cast",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
                 ],
               ),
             ),
