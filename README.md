@@ -1,6 +1,6 @@
 # Showtime
 
-Cross-platform TMDB-API-based Movies/Series streaming app with favourite functionality
+Cross-platform TMDB-API-based Movies/Series app with favourite functionality
 
 ## Getting Started
 
