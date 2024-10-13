@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:showtime/models/movies.dart';
+import 'package:showtime/provider/movies_provider.dart';
 import 'package:showtime/provider/videos_provider.dart';
 import 'package:showtime/utils/colors.dart';
 import 'package:showtime/utils/constants.dart';
@@ -65,14 +66,18 @@ class MoviesDetailsPage extends StatelessWidget {
                       // Fav Button
                       IconButton(
                         onPressed: () {
-                          // TODO : Send movie to the Favorite section
-                          // TODO : Change color to Red
+                          Provider.of<MoviesProvider>(context, listen: false)
+                              .toggleFavorite(movie);
                         },
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white70,
+                        icon: Icon(
+                          Provider.of<MoviesProvider>(context).isFavorite(movie)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Provider.of<MoviesProvider>(context).isFavorite(movie)
+                              ? Colors.red // **Red color if favorite**
+                              : Colors.white70,
                         ),
-                      )
+                      ),
                     ],
                   ),
 

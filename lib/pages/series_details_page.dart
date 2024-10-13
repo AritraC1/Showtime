@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:showtime/provider/series_provider.dart';
 import 'package:showtime/utils/colors.dart';
 import 'package:showtime/utils/constants.dart';
 import 'package:showtime/models/series.dart';
@@ -61,12 +63,17 @@ class SeriesDetailsPage extends StatelessWidget {
                       // Fav Button
                       IconButton(
                         onPressed: () {
-                          // TODO : Send movie to the Favorite section
-                          // TODO : Change color to Red
+                          Provider.of<SeriesProvider>(context, listen: false)
+                              .toggleFav(tv);
                         },
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white70,
+                        icon: Icon(
+                          Provider.of<SeriesProvider>(context).isFavorite(tv)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Provider.of<SeriesProvider>(context)
+                                  .isFavorite(tv)
+                              ? Colors.red // **Red color if favorite**
+                              : Colors.white70,
                         ),
                       )
                     ],

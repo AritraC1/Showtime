@@ -12,12 +12,31 @@ class SeriesProvider with ChangeNotifier {
   // List to store trending 
   List<Series> _trendingSeries = [];
 
+  // List to store my favourite series
+  final List<Series> _favouriteSeries = [];
+
+  // Getter to access trending 
+  List<Series> get trending => _trendingSeries;
+  List<Series> get favoriteSeries => _favouriteSeries;
+
+  bool isFavorite(Series tv) {
+    return _favouriteSeries.contains(tv);
+  }
+
+  void toggleFav(Series tv) {
+    if(isFavorite(tv)) {
+      _favouriteSeries.remove(tv);
+    }
+    else {
+      _favouriteSeries.add(tv);
+    }
+    notifyListeners();
+  }
+
   // Pagination
   int _currentPage = 1; // Track the current page number
   bool _isLoading = false; // Track if a request is already in progress
 
-  // Getter to access trending 
-  List<Series> get trending => _trendingSeries;
   bool get isLoading => _isLoading;
 
   Future<void> getTrendingSeries({bool loadMore = false}) async {

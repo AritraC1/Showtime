@@ -12,13 +12,32 @@ class MoviesProvider with ChangeNotifier {
   // List to store trending movies
   List<Movies> _trendingMovies = [];
 
-  // Pagination
-  int _currentPage = 1; // Track the current page number
-  bool _isLoading = false; // Track if a request is already in progress
+  // List to store fav movies
+  final List<Movies> _favoriteMovies = [];
 
   // Getter to access trending movies
   List<Movies> get trendingMovies => _trendingMovies;
+  List<Movies> get favoriteMovies => _favoriteMovies;
+
+  bool isFavorite(Movies movie) {
+    return _favoriteMovies.contains(movie);
+  }
+
+  void toggleFavorite(Movies movie) {
+    if(isFavorite(movie)) {
+      _favoriteMovies.remove(movie);
+    }
+    else {
+      _favoriteMovies.add(movie);
+    }
+    notifyListeners();
+  }
+
   bool get isLoading => _isLoading;
+
+  // Pagination
+  int _currentPage = 1; // Track the current page number
+  bool _isLoading = false; // Track if a request is already in progress
 
   Future<void> getTrendingMovies({bool loadMore = false}) async {
     if (_isLoading) return; // Avoid making multiple requests at once
@@ -44,5 +63,6 @@ class MoviesProvider with ChangeNotifier {
       _isLoading = false;
       throw Exception('Failed to load trending movies');
     }
+    notifyListeners();
   }
 }
