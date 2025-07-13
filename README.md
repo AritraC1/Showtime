@@ -1,16 +1,40 @@
 # Showtime
 
-Cross-platform TMDB-API-based Movies/Series app with favourite functionality
+A cross-platform Movies & TV Shows app built with **Flutter**, powered by
+the [TMDB API](https://www.themoviedb.org/documentation/api), supporting **iOS** and **Android**.
+Includes search, details, and a **favorites** feature.
+
+## Features
+- Browse Trending Movies & TV Shows
+- View Details: Cast, Overview, Rating, Release Date
+- Add/Remove from Favorites (Local storage)
+- Search for Movies & TV Shows
+- Responsive UI for Mobile, Tablet, and Web
+- Dark/Light Theme Support
+- Built with Flutter and TMDB API
+
+## Screenshots
+
+
+## Tech Stack
+- **Flutter**
+- **Dart**
+- **TMDB API**
+- **Provider**
+- **SharedPreferences** for favorites persistence
+- **HTTP** for network calls
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-Here are a few resources to get you started if this is your first Flutter project:
+- Flutter SDK (3.0+)
+- A valid TMDB API Key (Free from [themoviedb.org](https://www.themoviedb.org/signup))
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+git clone https://github.com/AritraC1/Showtime.git
+cd Showtime
+flutter pub get
+```
