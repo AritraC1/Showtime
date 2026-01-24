@@ -6,16 +6,16 @@ import 'package:showtime/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class SeriesProvider with ChangeNotifier {
-  static const _trendingSeriesUrl =
+  String get _trendingSeriesUrl =>
       'https://api.themoviedb.org/3/trending/tv/day?api_key=${Constants.apiKey}';
 
-  // List to store trending 
+  // List to store trending
   List<Series> _trendingSeries = [];
 
   // List to store my favourite series
   final List<Series> _favouriteSeries = [];
 
-  // Getter to access trending 
+  // Getter to access trending
   List<Series> get trending => _trendingSeries;
   List<Series> get favoriteSeries => _favouriteSeries;
 
@@ -24,10 +24,9 @@ class SeriesProvider with ChangeNotifier {
   }
 
   void toggleFav(Series tv) {
-    if(isFavorite(tv)) {
+    if (isFavorite(tv)) {
       _favouriteSeries.remove(tv);
-    }
-    else {
+    } else {
       _favouriteSeries.add(tv);
     }
     notifyListeners();
@@ -44,11 +43,13 @@ class SeriesProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final response = await http.get(Uri.parse('$_trendingSeriesUrl&page=$_currentPage'));
+    final response =
+        await http.get(Uri.parse('$_trendingSeriesUrl&page=$_currentPage'));
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
-      final List<Series> fetched = decodedData.map((tv) => Series.fromJson(tv)).toList();
+      final List<Series> fetched =
+          decodedData.map((tv) => Series.fromJson(tv)).toList();
 
       if (loadMore) {
         _trendingSeries.addAll(fetched); // Append the new

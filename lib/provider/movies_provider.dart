@@ -6,7 +6,7 @@ import 'package:showtime/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
 class MoviesProvider with ChangeNotifier {
-  static const _trendingUrl =
+  String get _trendingUrl =>
       'https://api.themoviedb.org/3/trending/movie/day?api_key=${Constants.apiKey}';
 
   // List to store trending movies
@@ -24,10 +24,9 @@ class MoviesProvider with ChangeNotifier {
   }
 
   void toggleFavorite(Movies movie) {
-    if(isFavorite(movie)) {
+    if (isFavorite(movie)) {
       _favoriteMovies.remove(movie);
-    }
-    else {
+    } else {
       _favoriteMovies.add(movie);
     }
     notifyListeners();
@@ -44,11 +43,13 @@ class MoviesProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final response = await http.get(Uri.parse('$_trendingUrl&page=$_currentPage'));
+    final response =
+        await http.get(Uri.parse('$_trendingUrl&page=$_currentPage'));
 
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
-      final List<Movies> fetchedMovies = decodedData.map((movie) => Movies.fromJson(movie)).toList();
+      final List<Movies> fetchedMovies =
+          decodedData.map((movie) => Movies.fromJson(movie)).toList();
 
       if (loadMore) {
         _trendingMovies.addAll(fetchedMovies); // Append the new movies

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:showtime/pages/home_page.dart';
 import 'package:showtime/provider/movies_provider.dart';
@@ -6,7 +7,12 @@ import 'package:showtime/provider/series_provider.dart';
 import 'package:showtime/provider/videos_provider.dart';
 import 'package:showtime/utils/colors.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load .env file
+  await dotenv.load(fileName: ".env");
+
   runApp(
     MultiProvider(
       providers: [
