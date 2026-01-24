@@ -54,6 +54,7 @@ A feature-rich Flutter application for discovering and exploring trending movies
 - **Shared Preferences 2.3.2** - Local key-value storage for app preferences
 - **SQLite 2.3.3+1** - Database support for potential future features
 - **Flutter InAppWebView 6.0.0** - Web content viewing capabilities
+- **Flutter DotEnv 6.0.0** - Environment variable management for secure API key storage
 
 ### Development
 - **Flutter Lints 3.0.0** - Code quality and style guidelines
@@ -122,23 +123,42 @@ flutter pub get
 
 ### Configuration
 
-1. **Update the API key**
+1. **Create a `.env` file**
 
-Open `lib/utils/constants.dart` and replace the placeholder with your TMDB API key:
+In the root of your project, create a `.env` file with your TMDB API key:
+
+```env
+TMDB_API_KEY=your_tmdb_api_key_here
+```
+
+2. **Verify `.gitignore`**
+
+Make sure your `.gitignore` includes `.env` to keep your API key secure:
+
+```
+.env
+```
+
+3. **How It Works**
+
+The app uses `flutter_dotenv` to load environment variables at runtime. The `main.dart` initializes the dotenv package:
 
 ```dart
-class Constants {
-  static const apiKey = 'your_tmdb_api_key_here';
-  static const imagePath = 'https://image.tmdb.org/t/p/w500';
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  // ... rest of app initialization
 }
 ```
 
-2. **Security Note** (Recommended)
+The API key is accessed from `lib/utils/constants.dart`:
 
-For production, consider storing your API key securely:
-- Use environment variables via `flutter_dotenv` package
-- Move sensitive data outside version control
-- Add `.env` to `.gitignore`
+```dart
+class Constants {
+  static String get apiKey => dotenv.env['TMDB_API_KEY'] ?? '';
+  static const imagePath = 'https://image.tmdb.org/t/p/w500';
+}
+```
 
 ---
 
@@ -229,6 +249,7 @@ flutter build ios --release
 | `shared_preferences`     | 2.3.2   | Local storage     |
 | `sqflite`                | 2.3.3+1 | Database support  |
 | `flutter_inappwebview`   | 6.0.0   | Web content       |
+| `flutter_dotenv`         | 6.0.0   | Environment vars  |
 
 ---
 
@@ -243,7 +264,28 @@ flutter build ios --release
 - **Multiple Languages** - Localization support
 - **Cast Information** - Display actor and crew details
 - **Similar Recommendations** - Suggest similar movies/shows
+---
 
+## 📝 Recent Updates
+
+### Version Updates
+- **YouTube Player Flutter** - Updated to 9.1.3 for improved video playback
+- **Flutter SDK** - Minimum version updated to 3.24.0
+- **Dart SDK** - Minimum version updated to 3.5.0
+
+### Security Improvements
+- **Added `flutter_dotenv` 6.0.0** - Secure environment variable management
+- **Removed hardcoded API key** - Now uses `.env` file for sensitive data
+- **Added INTERNET permission** - Android manifest now explicitly includes internet permission
+
+### Code Quality
+- **Improved code formatting** - Better readability and adherence to Dart style guide
+- **Dynamic API URL construction** - URL builders now use getters for better integration with dotenv
+- **Async main initialization** - App properly initializes dotenv before running
+
+### Dependencies
+- **flutter_inappwebview** - Upgraded and properly configured as direct dependency
+- **YouTube Player Flutter** - Updated to latest stable version for better compatibility
 ---
 
 ## 🤝 Contributing
@@ -277,5 +319,3 @@ If you encounter any issues or have suggestions:
 - Provide detailed information about your problem
 
 ---
-
-**Made with ❤️ by Aritra Chatterjee**
